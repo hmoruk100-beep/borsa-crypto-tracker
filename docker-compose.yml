@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./bist_crypto.db
+      - AI_PROVIDER=anthropic
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - NEWSAPI_KEY=${NEWSAPI_KEY}
+      - CRYPTOPANIC_KEY=${CRYPTOPANIC_KEY}
+      - ALLOWED_ORIGINS=http://localhost:8081,http://localhost:19006,http://192.168.1.*
+    volumes:
+      - ./:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # İsteğe bağlı: PostgreSQL (SQLite yerine production için)
+  # postgres:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: bist_crypto
+  #     POSTGRES_PASSWORD: password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:
